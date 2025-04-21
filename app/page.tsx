@@ -50,9 +50,7 @@ export default function Home() {
 
   useEffect(() => {
     if (handData && socketRef.current && socketRef.current.connected) {
-      socketRef.current.emit("hand_data", {
-        features: handData,
-      });
+      socketRef.current.emit("hand_data", handData);
     }
   }, [handData]);
 
