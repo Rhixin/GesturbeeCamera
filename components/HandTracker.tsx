@@ -223,7 +223,7 @@ const HandTracker = ({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-96 h-96">
+      <div className="relative">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 rounded">
             <div className="text-center">
@@ -253,7 +253,7 @@ const HandTracker = ({
       </div>
 
       {/* Display model input data */}
-      <div className="mt-4 p-4 bg-gray-50 rounded w-96 overflow-x-auto">
+      {/* <div className="mt-4 p-4 bg-gray-50 rounded w-96 overflow-x-auto">
         <h3 className="font-bold mb-2">
           Model Input Values (21 landmarks × 3 coordinates):
         </h3>
@@ -281,7 +281,7 @@ const HandTracker = ({
           <p>Input shape for model: 63 features (21 points × 3 coordinates)</p>
           <p>Format: [x0, y0, z0, x1, y1, z1, ..., x20, y20, z20]</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
