@@ -41,15 +41,15 @@ const Navigation = () => {
       name: "Practice Mode",
       path: `/online/practice`,
       icon: "🎯",
-      color: "#FBBC05",
-      hoverColor: "#F9A602",
+      color: mode === "online" ? "#FBBC05" : "#00BFAF",
+      hoverColor: mode === "online" ? "#FBBC05" : "#00BFAF",
     },
     {
       name: "Gaming Mode",
       path: `/online/gaming`,
       icon: "🎮",
-      color: "#00BFAF",
-      hoverColor: "#00A199",
+      color: mode === "online" ? "#FBBC05" : "#00BFAF",
+      hoverColor: mode === "online" ? "#FBBC05" : "#00BFAF",
     },
   ];
 
@@ -57,6 +57,24 @@ const Navigation = () => {
   const handleModeToggle = (newMode) => {
     setMode(newMode);
   };
+
+  // Get current color scheme based on mode (not just active item)
+  const getModeColors = () => {
+    // If offline, use Gaming Mode colors
+    if (mode === "offline") {
+      return {
+        color: "#00BFAF", // Gaming Mode color
+        hoverColor: "#00A199", // Gaming Mode hover color
+      };
+    }
+    // If online, use Practice Mode colors
+    return {
+      color: "#FBBC05", // Practice Mode color
+      hoverColor: "#F9A602", // Practice Mode hover color
+    };
+  };
+
+  const modeColors = getModeColors();
 
   // Particle effects for active button
   const generateParticles = () => {
@@ -91,7 +109,7 @@ const Navigation = () => {
         <div
           className={`absolute top-1/2 left-0 -translate-y-1/2 w-100 h-16 rounded-full blur-xl opacity-30`}
           style={{
-            background: activeItem === "Practice Mode" ? "#FBBC05" : "#00BFAF",
+            background: mode === "online" ? "#FBBC05" : "#00BFAF",
           }}
         />
       </div>
@@ -212,10 +230,7 @@ const Navigation = () => {
               duration: 0.6,
             }}
             style={{
-              background:
-                activeItem === "Practice Mode"
-                  ? `linear-gradient(135deg, #FBBC05, #F9A602)`
-                  : `linear-gradient(135deg, #00BFAF, #00A199)`,
+              background: `linear-gradient(135deg, ${modeColors.color}, ${modeColors.hoverColor})`,
             }}
           />
         </div>
