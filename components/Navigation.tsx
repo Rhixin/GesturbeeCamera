@@ -2,14 +2,17 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useMode } from "./ModeContext";
 
 const Navigation = () => {
+  const { mode, setMode } = useMode();
   const pathname = usePathname();
+  const router = useRouter();
   const [activeItem, setActiveItem] = useState("Practice Mode");
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  // Set default to Practice Mode
+  // Set default to Practice Mode and determine online/offline mode
   useEffect(() => {
     // If path is root or doesn't match any nav items, consider Practice Mode as default
     if (
@@ -20,28 +23,40 @@ const Navigation = () => {
     } else {
       // Otherwise set based on current path
       const current = navItems.find((item) =>
-        pathname.includes(item.path.substring(1))
+        pathname.includes(item.path.split("/").pop())
       );
       if (current) setActiveItem(current.name);
+    }
+
+    // Determine if we're in online or offline mode
+    if (pathname.includes("/offline")) {
+      setMode("offline");
+    } else {
+      setMode("online");
     }
   }, [pathname]);
 
   const navItems = [
     {
       name: "Practice Mode",
-      path: "/online/practice",
+      path: `/online/practice`,
       icon: "🎯",
       color: "#FBBC05",
       hoverColor: "#F9A602",
     },
     {
       name: "Gaming Mode",
-      path: "/online/gaming",
+      path: `/online/gaming`,
       icon: "🎮",
       color: "#00BFAF",
       hoverColor: "#00A199",
     },
   ];
+
+  // Handle mode toggle
+  const handleModeToggle = (newMode) => {
+    setMode(newMode);
+  };
 
   // Particle effects for active button
   const generateParticles = () => {
@@ -70,7 +85,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="relative flex justify-items-start px-4">
+    <nav className="relative flex justify-between items-center px-4">
       {/* Background glow effect */}
       <div className="absolute inset-0 flex justify-start">
         <div
@@ -82,7 +97,6 @@ const Navigation = () => {
       </div>
 
       {/* Main navigation bar */}
-
       <div className="flex items-center justify-center gap-3 relative z-10">
         {navItems.map((item) => {
           const isActive = activeItem === item.name;
@@ -155,6 +169,56 @@ const Navigation = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Online/Offline Toggle - Added to the right side */}
+      <div className="relative z-10">
+        <div className="relative bg-gray-800 bg-opacity-50 flex items-center p-1 rounded-full w-40">
+          {/* Online Option */}
+          <button
+            onClick={() => handleModeToggle("online")}
+            className={`flex-1 h-8 rounded-full flex items-center justify-center text-sm font-medium z-10 transition-all duration-300 ${
+              mode === "online"
+                ? "text-[#104846]"
+                : "text-white hover:text-gray-300"
+            }`}
+          >
+            Online
+          </button>
+
+          {/* Offline Option */}
+          <button
+            onClick={() => handleModeToggle("offline")}
+            className={`flex-1 h-8 rounded-full flex items-center justify-center text-sm font-medium z-10 transition-all duration-300 ${
+              mode === "offline"
+                ? "text-[#104846]"
+                : "text-white hover:text-gray-300"
+            }`}
+          >
+            Offline
+          </button>
+
+          {/* Animated Selection Background */}
+          <motion.div
+            className="absolute top-1 h-8 rounded-full"
+            initial={false}
+            animate={{
+              x: mode === "online" ? 0 : "90%",
+              width: "50%",
+            }}
+            transition={{
+              type: "spring",
+              bounce: 0.3,
+              duration: 0.6,
+            }}
+            style={{
+              background:
+                activeItem === "Practice Mode"
+                  ? `linear-gradient(135deg, #FBBC05, #F9A602)`
+                  : `linear-gradient(135deg, #00BFAF, #00A199)`,
+            }}
+          />
+        </div>
       </div>
     </nav>
   );

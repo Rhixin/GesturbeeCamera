@@ -12,7 +12,9 @@ const ModeCard = ({ title, description, icon, isSelected, onClick }) => {
       }`}
       onClick={onClick}
     >
-      <div className="text-5xl mb-4">{icon}</div>
+      <div className="text-5xl flex items-center justify-center">
+        <img src={icon} alt="icon" className="w-40 h-40" />
+      </div>
       <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
       <p className="text-white/80">{description}</p>
     </motion.div>

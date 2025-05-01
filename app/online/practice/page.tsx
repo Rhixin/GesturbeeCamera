@@ -3,6 +3,7 @@ import HandTracker from "@/components/HandTracker";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMode } from "@/components/ModeContext";
 
 export default function SinglePlayer() {
   const [handData, setHandData] = useState<number[] | null>(null);
@@ -13,8 +14,18 @@ export default function SinglePlayer() {
   const socketRef = useRef<any>(null);
   const [showStats, setShowStats] = useState(false);
 
+  const { mode, setMode } = useMode();
+
   useEffect(() => {
-    const socket = io("https://aslmodelbackend.onrender.com/");
+    console.log(mode);
+    let socket;
+
+    if (mode === "online") {
+      socket = io("https://aslmodelbackend.onrender.com/");
+    } else {
+      socket = io("http://127.0.0.1:10000/");
+    }
+
     socketRef.current = socket;
 
     setSocketStatus("connecting");
@@ -48,7 +59,7 @@ export default function SinglePlayer() {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     if (handData && socketRef.current && socketRef.current.connected) {

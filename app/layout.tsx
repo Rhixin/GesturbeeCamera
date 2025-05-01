@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import BubbleBackground from "@/components/BubbleBackground";
+import { ModeProvider } from "@/components/ModeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,18 +30,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-gradient-to-b from-[#104846] to-[#00BFAF] text-[#373e50] relative overflow-hidden">
-          <BubbleBackground></BubbleBackground>
-          <div className="container mx-auto px-4 py-8 relative z-10">
-            <Header></Header>
+        <ModeProvider>
+          <div className="min-h-screen bg-gradient-to-b from-[#104846] to-[#00BFAF] text-[#373e50] relative overflow-hidden">
+            <BubbleBackground></BubbleBackground>
+            <div className="container mx-auto px-4 py-8 relative z-10">
+              <Header></Header>
 
-            {children}
+              {children}
 
-            <footer className="mt-24 text-center text-white/70">
-              <p>© 2025 GesturBee. All rights reserved.</p>
-            </footer>
+              <footer className="mt-24 text-center text-white/70">
+                <p>© 2025 GesturBee. All rights reserved.</p>
+              </footer>
+            </div>
           </div>
-        </div>
+        </ModeProvider>
       </body>
     </html>
   );

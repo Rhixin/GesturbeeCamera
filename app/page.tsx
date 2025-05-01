@@ -5,9 +5,11 @@ import Header from "@/components/Header";
 import BubbleBackground from "@/components/BubbleBackground";
 import ModeCard from "@/components/ModeCard";
 import { useRouter } from "next/navigation";
+import { useMode } from "@/components/ModeContext";
 
 export default function Home() {
   const router = useRouter();
+  const { mode, setMode } = useMode();
   const [selectedMode, setSelectedMode] = useState(null);
 
   const handleModeSelect = (mode) => {
@@ -30,15 +32,15 @@ export default function Home() {
       <div className="flex flex-col md:flex-row gap-8 justify-center w-full max-w-4xl mx-auto">
         <ModeCard
           title="Offline Mode"
-          description="Practice your bee skills locally. Perfect your gestures and set new high scores."
-          icon="🎮"
+          description="Test the model locally by practicing gestures and tracking prediction accuracy"
+          icon="/assets/images/offline.png"
           isSelected={selectedMode === "offline"}
           onClick={() => handleModeSelect("offline")}
         />
         <ModeCard
           title="Online Mode"
-          description="Connect with friends and compete in real-time multiplayer matches."
-          icon="🌐"
+          description="Evaluate the model's performance after separating it from the training pipeline and deploying it on a server"
+          icon="/assets/images/online.png"
           isSelected={selectedMode === "online"}
           onClick={() => handleModeSelect("online")}
         />
@@ -57,8 +59,10 @@ export default function Home() {
               className="px-12 py-4 bg-[#FBBC05] text-[#104846] text-xl font-bold rounded-full hover:bg-[#F9A602] transition-colors shadow-lg"
               onClick={() => {
                 if (selectedMode === "offline") {
-                  router.push("/offline");
+                  setMode("offline");
+                  router.push("/online/practice");
                 } else if (selectedMode === "online") {
+                  setMode("online");
                   router.push("/online/practice");
                 }
               }}
